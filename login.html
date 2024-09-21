@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login Page</title>
+    <style>
+      form {
+        width: 400px;
+        margin: auto;
+        padding: 30px;
+        background-image: url("password.jpg"); /* Enabled the background image */
+        background-size: cover; /* Ensures the image covers the entire form */
+        background-position: center; /* Centers the background image */
+        background-repeat: no-repeat; /* Prevents the image from repeating */
+        border-radius: 10px; /* Adds rounded corners */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a shadow for a nice effect */
+      }
+      .heading {
+        text-align: center;
+        font-size: 24px;
+        color: white;
+      }
+      label {
+        color: white;
+        display: block;
+        margin-bottom: 10px;
+      }
+      input[type="text"],
+      input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: none;
+        border-radius: 5px;
+      }
+      input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <form onsubmit="return validate()">
+      <h1 class="heading">Registration Form</h1>
+      <p>
+        <label>User Name</label>
+        <input type="text" name="username" onkeyup="white(this.value)" />
+      </p>
+      <p>
+        <label for="password">Password</label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          
+          onkeyup="passwordcheck(this.value)"
+          onkeyup="white(this.value)"
+        />
+      </p>
+      <p>
+        <label for="confirm-password">Confirm Password</label>
+        <input
+          type="password"
+          name="confirm-password"
+          id="confirm-password"
+          onkeyup="handlePasswordInput(this.value)"
+        />
+      </p>
+      <p>
+        <label class="password-check">8 characters</label>
+        <label class="password-check">1 lower case characters</label>
+        <label class="password-check">1 upper case characters</label>
+        <label class="password-check">1 numerical characters</label>
+        <label class="password-check">1 special characters</label>
+      </p>
+      <div id="alertconfirm" style="color: red"></div>
+      <br />
+      <div id="alertcaps" style="color: rgb(25, 0, 255)"></div>
+      <br />
+      <div id="alertspace" style="color: rgb(25, 0, 255)"></div>
+      <div>
+        <button
+          type="submit"
+          style="background-color: green; width: 100px; height: 50px"
+        >
+          SUBMIT
+        </button>
+        <button
+          type="button"
+          style="background-color: red; width: 200px; height: 50px"
+          onclick="toggle(this)"
+        >
+          SHOW PASSWORD
+        </button>
+      </div>
+    </form>
+  </body>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    var flag = 1;
+    var password = document.getElementById("password");
+    var spaceFlag = 1; // New flag for space detection
+
+    function check(elem) {
+      if (elem.value.length > 0) {
+        if (elem.value != password.value) {
+          document.getElementById("alertconfirm").innerText =
+            "Confirm password does not match";
+          flag = 0;
+        } else {
+          document.getElementById("alertconfirm").innerText = "";
+          flag = 1;
+        }
+      } else {
+        document.getElementById("alertconfirm").innerText =
+          "Please enter confirm password";
+        flag = 0;
+      }
+    }
+
+    function validate() {
+      // Prevent form submission if either flag is set to 0
+      return flag == 1 && spaceFlag == 1;
+    }
+
+    function toggle(elem) {
+      var type = password.getAttribute("type");
+      if (type == "password") {
+        password.setAttribute("type", "text");
+        elem.innerText = "Hide password";
+      } else {
+        password.setAttribute("type", "password");
+        elem.innerText = "Show password";
+      }
+    }
+
+    window.addEventListener("keyup", (event) => {
+      var isCaps = event.getModifierState("CapsLock");
+      if (isCaps)
+        document.getElementById("alertcaps").innerText =
+          "WARNING! Capslock is on.";
+      else document.getElementById("alertcaps").innerText = "";
+    });
+
+    var pattern = /\s/g;
+    function white(data) {
+      var isSpace = pattern.test(data);
+      if (isSpace) {
+        document.getElementById("alertspace").innerText =
+          "WARNING! It contains space.";
+        spaceFlag = 0; // Set spaceFlag to 0 if space is detected
+      } else {
+        document.getElementById("alertspace").innerText = "";
+        spaceFlag = 1; // Reset spaceFlag if no space is detected
+      }
+    }
+    function passwordcheck(data) {
+      var passclass = document.getElementsByClassName("password-check");
+      const lowercase = new RegExp("(?=.*[a-z])");
+      const uppercase = new RegExp("(?=.*[A-Z])");
+      const number = new RegExp("(?=.*[0-9])");
+      const specialchar = new RegExp("(?=.*[!@#\$%\^&\*])");
+      const eightchar = new RegExp("^.{8,}$");
+
+      passclass[0].style.color = eightchar.test(data) ? "green" : "white";
+      passclass[1].style.color = lowercase.test(data) ? "green" : "white";
+      passclass[2].style.color = uppercase.test(data) ? "green" : "white";
+      passclass[3].style.color = number.test(data) ? "green" : "white";
+      passclass[4].style.color = specialchar.test(data) ? "green" : "white";
+    }
+    function handlePasswordInput(value)
+     {
+        white(value);         // Check for spaces in the input
+        passwordcheck(value); // Validate the password strength
+      }
+
+
+
+  </script>
+</html>
